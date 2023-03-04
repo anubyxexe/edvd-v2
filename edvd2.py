@@ -1,0 +1,135 @@
+#code with PyQt5
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from pytube import YouTube
+import time
+
+class Ui_edvd(object):
+
+    def start(self):
+        lien = self.lineEdit.text()
+        yt = YouTube(lien)
+        self.label_output.setText(yt.title)
+        for i in range(0, 50):
+            self.progressBar.setProperty("value", i)
+            time.sleep(0.01)
+        time.sleep(1)
+        #yt.streams.first().download()
+        if(self.comboBox.currentText() == "mp3"):
+            yt.streams.filter(only_audio = True).first().download(filename = yt.title + ".mp3")
+        else:
+            yt.streams.filter(progressive = True, file_extension = "mp4").first().download(filename = yt.title + ".mp4")
+
+        for i in range(50,100):
+            self.progressBar.setProperty("value", i)
+            time.sleep(0.01)
+        self.progressBar.setProperty("value", 100)
+
+        
+
+    def setupUi(self, edvd):
+        edvd.setObjectName("edvd")
+        edvd.setEnabled(True)
+        edvd.resize(400, 500)
+        edvd.setMinimumSize(QtCore.QSize(400, 500))
+        edvd.setMaximumSize(QtCore.QSize(400, 500))
+        self.label = QtWidgets.QLabel(edvd)
+        self.label.setGeometry(QtCore.QRect(100, 40, 200, 50))
+        font = QtGui.QFont()
+        font.setFamily("DejaVu Serif")
+        font.setPointSize(30)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setUnderline(False)
+        font.setWeight(75)
+        font.setStrikeOut(False)
+        self.label.setFont(font)
+        self.label.setLineWidth(2)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setWordWrap(False)
+        self.label.setObjectName("label")
+        self.pushButton = QtWidgets.QPushButton(edvd)
+        self.pushButton.setGeometry(QtCore.QRect(250, 450, 130, 40))
+        self.pushButton.clicked.connect(self.start)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        font.setBold(True)
+        font.setWeight(75)
+        font.setStrikeOut(False)
+        font.setKerning(True)
+        self.pushButton.setFont(font)
+        self.pushButton.setText("download")
+        self.pushButton.setObjectName("pushButton")
+        self.lineEdit = QtWidgets.QLineEdit(edvd)
+        self.lineEdit.setGeometry(QtCore.QRect(50, 170, 300, 25))
+        self.lineEdit.setInputMask("")
+        self.lineEdit.setText("")
+        self.lineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit.setObjectName("lineEdit")
+        self.label_2 = QtWidgets.QLabel(edvd)
+        self.label_2.setGeometry(QtCore.QRect(50, 150, 130, 20))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(edvd)
+        self.label_3.setGeometry(QtCore.QRect(50, 70, 300, 50))
+        font = QtGui.QFont()
+        font.setFamily("DejaVu Serif")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setUnderline(False)
+        font.setWeight(75)
+        font.setStrikeOut(False)
+        self.label_3.setFont(font)
+        self.label_3.setLineWidth(2)
+        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_3.setWordWrap(False)
+        self.label_3.setObjectName("label_3")
+        self.comboBox = QtWidgets.QComboBox(edvd)
+        self.comboBox.setGeometry(QtCore.QRect(270, 200, 80, 25))
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("mp3")
+        self.comboBox.addItem("mp4")
+        self.progressBar = QtWidgets.QProgressBar(edvd)
+        self.progressBar.setGeometry(QtCore.QRect(20, 450, 210, 40))
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setObjectName("progressBar")
+        self.label_4 = QtWidgets.QLabel(edvd)
+        self.label_4.setGeometry(QtCore.QRect(215, 200, 50, 25))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName("label_4")
+        self.label_output = QtWidgets.QLabel(edvd)
+        self.label_output.setGeometry(QtCore.QRect(20, 430, 210, 20))
+        #self.label_output.setFrameShape(QtWidgets.QFrame.WinPanel)
+        self.label_output.setText("")
+        self.label_output.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_output.setObjectName("label_output")
+
+        self.retranslateUi(edvd)
+        QtCore.QMetaObject.connectSlotsByName(edvd)
+
+    def retranslateUi(self, edvd):
+        _translate = QtCore.QCoreApplication.translate
+        edvd.setWindowTitle(_translate("edvd", "edvd v2"))
+        self.label.setText(_translate("edvd", "edvd v2"))
+        self.label_2.setText(_translate("edvd", "lien de la vidéo:"))
+        self.label_3.setText(_translate("edvd", "Extracteur de Data Vidéo Digital"))
+        #self.comboBox.setItemText(0, _translate("edvd", "mp3"))
+        #self.comboBox.setItemText(1, _translate("edvd", "mp4"))
+        self.label_4.setText(_translate("edvd", "format:"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    edvd = QtWidgets.QWidget()
+    ui = Ui_edvd()
+    ui.setupUi(edvd)
+    edvd.show()
+    sys.exit(app.exec_())
